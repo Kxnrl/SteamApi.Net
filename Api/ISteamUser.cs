@@ -51,9 +51,7 @@ internal class SteamUser : SteamApi, ISteamUser
     {
         var response = new List<PlayerBan>(steamIds.Length);
 
-        var chunks = steamIds.Chunk(100);
-
-        foreach (var chunk in chunks)
+        foreach (var chunk in steamIds.Distinct().Chunk(100))
         {
             var url = $"steamids={string.Join(',', chunk)}";
 
@@ -67,7 +65,7 @@ internal class SteamUser : SteamApi, ISteamUser
     {
         var response = new List<PlayerSummary>(steamIds.Length);
 
-        foreach (var chunk in steamIds.Chunk(100))
+        foreach (var chunk in steamIds.Distinct().Chunk(100))
         {
             var url = $"steamids={string.Join(',', chunk)}";
 

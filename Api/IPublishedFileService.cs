@@ -37,7 +37,7 @@ internal class PublishedFileService : SteamApi, IPublishedFileService
     {
         var response = new List<PublishedFileDetails>(publishFileIds.Length);
 
-        foreach (var chunk in publishFileIds.Chunk(50))
+        foreach (var chunk in publishFileIds.Distinct().Chunk(50))
         {
             var builder = new StringBuilder();
 
