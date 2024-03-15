@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,7 +9,7 @@ using Kxnrl.SteamApi.Responses;
 
 namespace Kxnrl.SteamApi;
 
-public interface ISteamApi
+public interface ISteamApi : IDisposable
 {
     /// <summary>
     ///     Api Interface Name
@@ -84,6 +84,12 @@ internal abstract class SteamApi : ISteamApi
                      ?? throw new InvalidDataException("Invalid upstream data.");
 
         return result;
+    }
+
+    public void Dispose()
+    {
+        _defaultRest.Dispose();
+        _globalRest.Dispose();
     }
 }
 

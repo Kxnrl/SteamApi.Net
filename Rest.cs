@@ -4,7 +4,7 @@ using System.Net.Http;
 
 namespace Kxnrl.SteamApi;
 
-internal interface IRest
+internal interface IRest : IDisposable
 {
     HttpClient CreateClient();
 }
@@ -47,5 +47,10 @@ internal class Rest : IRest
         client.DefaultRequestHeaders.Add("User-Agent", "Kxnrl.SteamApi.Client");
 
         return client;
+    }
+
+    public void Dispose()
+    {
+        _httpHandler.Dispose();
     }
 }
