@@ -1,4 +1,5 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kxnrl.SteamApi.Models.IPublishedFileService;
@@ -11,8 +12,9 @@ public interface IPublishedFileService : ISteamApi
     /// <summary>
     ///     Get workshop published item details
     /// </summary>
-    /// <param name="publishFileIds">Item ID (Max 100 items)</param>
+    /// <param name="publishFileIds">Item ID</param>
     /// <param name="includeChildren">Get with children</param>
+    /// <returns><see cref="PublishedFileDetails" />, Missing item if private or deleted.</returns>
     Task<PublishedFileDetails[]> GetDetails(ulong[] publishFileIds, bool includeChildren = false);
 }
 
@@ -33,22 +35,24 @@ internal class PublishedFileService : SteamApi, IPublishedFileService
 
     public async Task<PublishedFileDetails[]> GetDetails(ulong[] publishFileIds, bool includeChildren = false)
     {
-        if (publishFileIds.Length > 100)
+        var response = new List<PublishedFileDetails>(publishFileIds.Length);
+
+        foreach (var chunk in publishFileIds.Chunk(50))
         {
-            throw new ArgumentException("Max 100 items", nameof(publishFileIds));
+            var builder = new StringBuilder();
+
+            builder.Append($"includechildren={includeChildren.ToString().ToLower()}");
+
+            for (var i = 0; i < chunk.Length; i++)
+            {
+                builder.Append($"&publishedfileids[{i}]={chunk[i]}");
+            }
+
+            var chunkResponse = await Get<FileDetailResponse>($"{nameof(GetDetails)}/v1", builder.ToString());
+
+            response.AddRange(chunkResponse.PublishedFileDetails);
         }
 
-        var builder = new StringBuilder();
-
-        builder.Append($"includechildren={includeChildren.ToString().ToLower()}");
-
-        for (var i = 0; i < publishFileIds.Length; i++)
-        {
-            builder.Append($"&publishedfileids[{i}]={publishFileIds[i]}");
-        }
-
-        var response = await Get<FileDetailResponse>($"{nameof(GetDetails)}/v1", builder.ToString());
-
-        return response.PublishedFileDetails;
+        return [.. response];
     }
 }

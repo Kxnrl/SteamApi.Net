@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -18,13 +18,13 @@ public interface ISteamUser : ISteamApi
     /// <summary>
     ///     Get ban list for SteamUser
     /// </summary>
-    /// <param name="steamIds">User SteamId  (Max 100 items)</param>
+    /// <param name="steamIds">User SteamId</param>
     Task<PlayerBan[]> GetPlayerBans(ulong[] steamIds);
 
     /// <summary>
     ///     Get player summary for SteamUser
     /// </summary>
-    /// <param name="steamIds">User SteamId  (Max 100 items)</param>
+    /// <param name="steamIds">User SteamId</param>
     Task<PlayerSummary[]> GetPlayerSummaries(ulong[] steamIds);
 }
 
@@ -47,44 +47,50 @@ internal class SteamUser : SteamApi, ISteamUser
         return response.FriendsList.Friends;
     }
 
-    public Task<PlayerBan[]> GetPlayerBans(ulong[] steamIds)
+    public async Task<PlayerBan[]> GetPlayerBans(ulong[] steamIds)
     {
-        if (steamIds.Length > 100)
+        var response = new List<PlayerBan>(steamIds.Length);
+
+        var chunks = steamIds.Chunk(100);
+
+        foreach (var chunk in chunks)
         {
-            throw new ArgumentException("Max 100 items", nameof(steamIds));
+            var url = $"steamids={string.Join(',', chunk)}";
+
+            response.AddRange(await Get<PlayerBan[]>($"{nameof(GetPlayerBans)}/v1", url, "players"));
         }
 
-        var url = $"steamids={string.Join(',', steamIds)}";
-
-        return Get<PlayerBan[]>($"{nameof(GetPlayerBans)}/v1", url, "players");
+        return [.. response];
     }
 
     public async Task<PlayerSummary[]> GetPlayerSummaries(ulong[] steamIds)
     {
-        if (steamIds.Length > 100)
+        var response = new List<PlayerSummary>(steamIds.Length);
+
+        foreach (var chunk in steamIds.Chunk(100))
         {
-            throw new ArgumentException("Max 100 items", nameof(steamIds));
-        }
+            var url = $"steamids={string.Join(',', chunk)}";
 
-        var url = $"steamids={string.Join(',', steamIds)}";
+            var steamChina  = await Get<PlayerSummariesResponse>($"{nameof(GetPlayerSummaries)}/v2", url);
+            var steamGlobal = await Get<PlayerSummariesResponse>($"{nameof(GetPlayerSummaries)}/v2", url, false);
 
-        var steamChina  = await Get<PlayerSummariesResponse>($"{nameof(GetPlayerSummaries)}/v2", url);
-        var steamGlobal = await Get<PlayerSummariesResponse>($"{nameof(GetPlayerSummaries)}/v2", url, false);
+            var dict = steamChina.Players.ToDictionary(x => x.SteamId, x => x);
 
-        var dict = steamChina.Players.ToDictionary(x => x.SteamId, x => x);
-
-        try
-        {
-            foreach (var g in steamGlobal.Players)
+            try
             {
-                dict.TryAdd(g.SteamId, g);
+                foreach (var g in steamGlobal.Players)
+                {
+                    dict.TryAdd(g.SteamId, g);
+                }
             }
-        }
-        catch
-        {
-            // skip
+            catch
+            {
+                // skip
+            }
+
+            response.AddRange([.. dict.Values]);
         }
 
-        return [.. dict.Values];
+        return [.. response];
     }
 }

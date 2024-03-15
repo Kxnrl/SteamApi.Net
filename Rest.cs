@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Http;
 
@@ -26,6 +26,7 @@ internal class Rest : IRest
             AllowAutoRedirect              = true,
             AutomaticDecompression         = DecompressionMethods.All,
             EnableMultipleHttp2Connections = true,
+            ConnectTimeout                 = TimeSpan.FromSeconds(10),
         };
 
         _baseUri = new Uri(url);
@@ -37,12 +38,13 @@ internal class Rest : IRest
     {
         var client = new HttpClient(_httpHandler, false)
         {
-            BaseAddress = _baseUri,
-            Timeout     = _timeout,
+            BaseAddress           = _baseUri,
+            Timeout               = _timeout,
+            DefaultRequestVersion = HttpVersion.Version20,
+            DefaultVersionPolicy  = HttpVersionPolicy.RequestVersionOrLower,
         };
 
         client.DefaultRequestHeaders.Add("User-Agent", "Kxnrl.SteamApi.Client");
-        client.DefaultRequestVersion = HttpVersion.Version20;
 
         return client;
     }

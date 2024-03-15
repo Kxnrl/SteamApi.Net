@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Kxnrl.SteamApi.Enums;
+﻿namespace Kxnrl.SteamApi.Enums;
 
 public enum SteamApiResult
 {
