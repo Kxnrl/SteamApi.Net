@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Kxnrl.SteamApi</RootNamespace>
+    <AssemblyName>Kxnrl.SteamApi</AssemblyName>
+    <PlatformTarget>x64</PlatformTarget>
+    <Authors>Kyle @Kxnrl</Authors>
+    <PackageProjectUrl>https://github.com/Kxnrl/SteamApi.Net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Kxnrl/SteamApi.Net</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <NoWarn>1701;1702;1591;</NoWarn>
+    <WarningsNotAsErrors>1591;</WarningsNotAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <NoWarn>1701;1702;1591;</NoWarn>
+    <WarningsNotAsErrors>1591;</WarningsNotAsErrors>
+  </PropertyGroup>
+
+</Project>
