@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Kxnrl.SteamApi.Enums;
 using Kxnrl.SteamApi.Models.IPublishedFileService;
 using Kxnrl.SteamApi.Responses.IPublishedFileService;
 
@@ -50,7 +53,47 @@ internal class PublishedFileService : SteamApi, IPublishedFileService
 
             var chunkResponse = await Get<FileDetailResponse>($"{nameof(GetDetails)}/v1", builder.ToString());
 
-            response.AddRange(chunkResponse.PublishedFileDetails);
+            foreach (var item in chunkResponse.PublishedFileDetails)
+            {
+                if (item.Result is not SteamApiResult.Ok)
+                {
+                    Debug.Print($"Ignore Invalid State {JsonSerializer.Serialize(item)}");
+
+                    continue;
+                }
+
+                if (item.Creator is null
+                    || item.CreatorAppId is null
+                    || item.Manifest is null
+                    || item.Title is null
+                    || item.PreviewImage is null
+                    || item.TimeUpdated is null
+                    || item.Visibility is null
+                    || item.Flags is null
+                    || item.FileSize is null
+                    || item.FileType is null)
+                {
+                    Debug.Print($"Ignore Null {JsonSerializer.Serialize(item)}");
+
+                    continue;
+                }
+
+                response.Add(new PublishedFileDetails
+                {
+                    PublishedFileId = item.PublishedFileId,
+                    Creator         = item.Creator.Value,
+                    CreatorAppId    = item.CreatorAppId.Value,
+                    Manifest        = item.Manifest.Value,
+                    Title           = item.Title,
+                    PreviewImage    = item.PreviewImage,
+                    TimeUpdated     = item.TimeUpdated.Value,
+                    Visibility      = item.Visibility.Value,
+                    Flags           = item.Flags.Value,
+                    FileSize        = item.FileSize.Value,
+                    FileType        = item.FileType.Value,
+                    Children        = item.Children,
+                });
+            }
         }
 
         return [.. response];
