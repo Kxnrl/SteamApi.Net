@@ -78,7 +78,7 @@ internal class SteamUser : SteamApi, ISteamUser
             {
                 foreach (var g in steamGlobal.Players)
                 {
-                    dict.TryAdd(g.SteamId, g);
+                    dict[g.SteamId] = g;
                 }
             }
             catch
