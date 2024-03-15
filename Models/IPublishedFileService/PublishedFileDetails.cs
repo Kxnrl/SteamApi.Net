@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using Kxnrl.SteamApi.Enums;
 
 namespace Kxnrl.SteamApi.Models.IPublishedFileService;
@@ -22,6 +22,9 @@ public class PublishedFileDetails : PublishedFile
     [JsonPropertyName("title")]
     public required string Title { get; init; }
 
+    [JsonPropertyName("preview_url")]
+    public string? PreviewImage { get; init; }
+
     [JsonPropertyName("time_updated")]
     public required int TimeUpdated { get; init; }
 
@@ -35,10 +38,10 @@ public class PublishedFileDetails : PublishedFile
     public PublishedFileDetailsChildren[]? Children { get; init; }
 
     [JsonIgnore]
-    public string ApproveState => (Flags & WaitForApproveFlag) == 0 ? "Approved" : "Waiting for Approve";
+    private const int WaitForApproveFlag = 128;
 
     [JsonIgnore]
-    private const int WaitForApproveFlag = 128;
+    public bool IsWaitingForApprove => (Flags & WaitForApproveFlag) != 0;
 }
 
 public class PublishedFileDetailsChildren : PublishedFile
