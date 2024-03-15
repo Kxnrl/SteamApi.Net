@@ -34,6 +34,9 @@ public class PublishedFileDetails : PublishedFile
     [JsonPropertyName("flags")]
     public required int Flags { get; init; }
 
+    [JsonPropertyName("file_size")]
+    public int FileSize { get; init; }
+
     [JsonPropertyName("children")]
     public PublishedFileDetailsChildren[]? Children { get; init; }
 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Kxnrl.SteamApi.Models.ISteamUser;
@@ -17,11 +18,13 @@ public interface ISteamUser : ISteamApi
     /// <summary>
     ///     Get ban list for SteamUser
     /// </summary>
+    /// <param name="steamIds">User SteamId  (Max 100 items)</param>
     Task<PlayerBan[]> GetPlayerBans(ulong[] steamIds);
 
     /// <summary>
     ///     Get player summary for SteamUser
     /// </summary>
+    /// <param name="steamIds">User SteamId  (Max 100 items)</param>
     Task<PlayerSummary[]> GetPlayerSummaries(ulong[] steamIds);
 }
 
@@ -46,6 +49,11 @@ internal class SteamUser : SteamApi, ISteamUser
 
     public Task<PlayerBan[]> GetPlayerBans(ulong[] steamIds)
     {
+        if (steamIds.Length > 100)
+        {
+            throw new ArgumentException("Max 100 items", nameof(steamIds));
+        }
+
         var url = $"steamids={string.Join(',', steamIds)}";
 
         return Get<PlayerBan[]>($"{nameof(GetPlayerBans)}/v1", url, "players");
@@ -53,6 +61,11 @@ internal class SteamUser : SteamApi, ISteamUser
 
     public async Task<PlayerSummary[]> GetPlayerSummaries(ulong[] steamIds)
     {
+        if (steamIds.Length > 100)
+        {
+            throw new ArgumentException("Max 100 items", nameof(steamIds));
+        }
+
         var url = $"steamids={string.Join(',', steamIds)}";
 
         var steamChina  = await Get<PlayerSummariesResponse>($"{nameof(GetPlayerSummaries)}/v2", url);
