@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Kxnrl.SteamApi.Models.ISteamApp;
 
@@ -11,6 +11,7 @@ public class UpToDate
     public required bool VersionIsListable { get; init; }
 
     [JsonPropertyName("required_version")]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public uint RequiredVersion { get; init; }
 
     [JsonPropertyName("message")]

@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Kxnrl.SteamApi.Models.ISteamUser;
 
@@ -9,6 +9,7 @@ public class PlayerSummary
     public required ulong SteamId { get; init; }
 
     [JsonPropertyName("communityvisibilitystate")]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public required int VisibilityState { get; init; }
 
     [JsonPropertyName("personaname")]
@@ -21,9 +22,11 @@ public class PlayerSummary
     public required string AvatarHash { get; init; }
 
     [JsonPropertyName("personastate")]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public int PersonaState { get; init; }
 
     [JsonPropertyName("personastateflags")]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public int PersonaStateFlags { get; init; }
 
     [JsonPropertyName("gameextrainfo")]
