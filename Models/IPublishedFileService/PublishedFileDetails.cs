@@ -31,7 +31,6 @@ internal class PublishedFileDetailsInternal : PublishedFile
     public int? TimeUpdated { get; init; }
 
     [JsonPropertyName("visibility")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public ItemVisibilityType? Visibility { get; init; }
 
     [JsonPropertyName("flags")]
@@ -43,7 +42,6 @@ internal class PublishedFileDetailsInternal : PublishedFile
     public int? FileSize { get; init; }
 
     [JsonPropertyName("file_type")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public ItemFileType? FileType { get; init; }
 
     [JsonPropertyName("children")]
@@ -75,7 +73,6 @@ public class PublishedFileDetails : PublishedFile
     public required int TimeUpdated { get; init; }
 
     [JsonPropertyName("visibility")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public required ItemVisibilityType Visibility { get; init; }
 
     [JsonPropertyName("flags")]
@@ -87,7 +84,6 @@ public class PublishedFileDetails : PublishedFile
     public required int FileSize { get; init; }
 
     [JsonPropertyName("file_type")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public required ItemFileType FileType { get; init; }
 
     [JsonPropertyName("children")]
@@ -107,6 +103,5 @@ public class PublishedFileDetailsChildren : PublishedFile
     public required int SortOrder { get; init; }
 
     [JsonPropertyName("file_type")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public required ItemFileType FileType { get; init; }
 }
