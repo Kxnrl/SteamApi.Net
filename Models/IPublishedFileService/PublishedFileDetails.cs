@@ -14,7 +14,7 @@ internal class PublishedFileDetailsInternal : PublishedFile
 
     [JsonPropertyName("creator_appid")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-    public int? CreatorAppId { get; init; }
+    public long? CreatorAppId { get; init; }
 
     [JsonPropertyName("hcontent_file")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
@@ -28,18 +28,18 @@ internal class PublishedFileDetailsInternal : PublishedFile
 
     [JsonPropertyName("time_updated")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-    public int? TimeUpdated { get; init; }
+    public long? TimeUpdated { get; init; }
 
     [JsonPropertyName("visibility")]
     public ItemVisibilityType? Visibility { get; init; }
 
     [JsonPropertyName("flags")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-    public int? Flags { get; init; }
+    public long? Flags { get; init; }
 
     [JsonPropertyName("file_size")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-    public int? FileSize { get; init; }
+    public long? FileSize { get; init; }
 
     [JsonPropertyName("file_type")]
     public ItemFileType? FileType { get; init; }
@@ -56,7 +56,7 @@ public class PublishedFileDetails : PublishedFile
 
     [JsonPropertyName("creator_appid")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-    public required int CreatorAppId { get; init; }
+    public required long CreatorAppId { get; init; }
 
     [JsonPropertyName("hcontent_file")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
@@ -70,18 +70,18 @@ public class PublishedFileDetails : PublishedFile
 
     [JsonPropertyName("time_updated")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-    public required int TimeUpdated { get; init; }
+    public required long TimeUpdated { get; init; }
 
     [JsonPropertyName("visibility")]
     public required ItemVisibilityType Visibility { get; init; }
 
     [JsonPropertyName("flags")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-    public required int Flags { get; init; }
+    public required long Flags { get; init; }
 
     [JsonPropertyName("file_size")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-    public required int FileSize { get; init; }
+    public required long FileSize { get; init; }
 
     [JsonPropertyName("file_type")]
     public required ItemFileType FileType { get; init; }
@@ -100,7 +100,7 @@ public class PublishedFileDetailsChildren : PublishedFile
 {
     [JsonPropertyName("sortorder")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-    public required int SortOrder { get; init; }
+    public required long SortOrder { get; init; }
 
     [JsonPropertyName("file_type")]
     public required ItemFileType FileType { get; init; }
